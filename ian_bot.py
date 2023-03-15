@@ -42,6 +42,5 @@ async def send_telegram_notification(message):
     bot.send_message(chat_id = TELEGRAM_CHAT_ID, text = message)
 
 if __name__ == '__main__':
-    app = web.Application()
     app.router.add_post('/webhook', handle_webhook)
     web.run_app(app)
