@@ -68,7 +68,7 @@ def send_message(chat_id, message):
 scheduler = BackgroundScheduler()
 
 # Schedule the check_json_data function to run every day at 10 AM
-scheduler.add_job(check_json_data, 'cron', hour=18, minute=0, timezone='America/Santiago')
+scheduler.add_job(check_json_data, 'cron', hour=10, minute=0, timezone='America/Santiago')
 
 if __name__ == '__main__':
     # Start the scheduler
