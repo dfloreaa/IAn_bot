@@ -29,10 +29,10 @@ def send_issue_to_telegram(issue):
     chat_id = config["CHAT_ID"]
 
     # Construct the message to send to the Telegram group
-    message = f"<a href={issue['html_url']}> <b>Issue #{issue['id']} - {issue['title']}</b></a> \n\n<b>Descripción:</b>\n{issue['body']}\n\n<b>Link:</b>"
+    message = f"<a href={issue['html_url']}> <b>Issue #{issue['id']} - {issue['title']}</b></a> \n\n<b>Descripción:</b>\n{issue['body']}"
 
     # Use the bot to send the message to the Telegram group
-    bot.bot.send_message(chat_id=chat_id, text=message, parse_mode='HTML')
+    bot.bot.send_message(chat_id=chat_id, text=message, parse_mode='Markdown')
 
 if __name__ == '__main__':
     app.run(debug=True)
