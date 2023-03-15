@@ -14,7 +14,7 @@ with open(config_path, 'r') as f:
     config = json.load(f)
 
 app = Flask(__name__)
-telegram_bot = telegram.Bot(token=config['TELEGRAM_BOT_TOKEN'], request_kwargs={'pool_connections': 100, 'pool_maxsize': 10, 'pool_timeout': 20})
+telegram_bot = telegram.Bot(token=config['TELEGRAM_BOT_TOKEN'])
 github = Github(config['GITHUB_TOKEN'])
 repo = github.get_repo(config['GITHUB_REPO'])
 
@@ -25,9 +25,9 @@ async def handle_issue_event(event_data):
     issue_repo = ''.join(issue.url.split("https://api.github.com/repos")[1:])
     issue_url = "https://github.com/" + issue_repo
 
-    message = f"Nueva issue: \n <b>#{issue.number} - {issue.title}</b>\n\n<b>Descripción:</b>\n{issue.body}\n\n<b>Link:</b> {issue_url}"
+    message = f"<a href={issue_url}> <b>Issue #{issue.number} - {issue.title}</b></a> \n\n<b>Descripción:</b>\n{issue.body}\n\n<b>Link:</b>"
     
-    await telegram_bot.send_message(chat_id=group_id, text=message, parse_mode='HTML')
+    await telegram_bot.send_message(chat_id=group_id, text=message, parse_mode='HTML', pool_timeout = 15)
 
 
 def get_group_for_today():
