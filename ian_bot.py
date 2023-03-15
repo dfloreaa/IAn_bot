@@ -37,11 +37,17 @@ def send_issue_to_telegram(issue):
     # Use the bot to send the message to the Telegram group
     bot.bot.send_message(chat_id=chat_id, text=message, parse_mode='Markdown')
 
+print(datetime.date.today())
+print(datetime.datetime.now())
+
 def check_json_data():
     with open(reminder_path, 'r') as f:
         data = json.load(f)
 
     # Get the current date
+    print("RUNNING")
+    print(datetime.date.today())
+    print(datetime.datetime.now())
     today = datetime.date.today()
 
     # Check if today is featured in the JSON file
@@ -65,7 +71,7 @@ def send_message(chat_id, message):
 scheduler = BackgroundScheduler({'apscheduler.timezone': 'Chile/Continental'})
 
 # Schedule the check_json_data function to run every day at 10 AM
-scheduler.add_job(check_json_data, 'interval', days=1, start_date='2023-03-15 17:15:00')
+scheduler.add_job(check_json_data, 'interval', days = 1, start_date='2023-03-15 17:15:00')
 
 if __name__ == '__main__':
     # Start the scheduler
