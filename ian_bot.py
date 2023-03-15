@@ -27,8 +27,7 @@ async def handle_issue_event(event_data):
 
     message = f"Nueva issue: \n <b>#{issue.number} - {issue.title}</b>\n\n<b>Descripción:</b>\n{issue.body}\n\n<b>Link:</b> {issue_url}"
     
-    async with ClientSession() as session:
-        await telegram_bot.send_message(chat_id=group_id, text=message, parse_mode='HTML', session=session)
+    await telegram_bot.send_message(chat_id=group_id, text=message, parse_mode='HTML')
 
 
 def get_group_for_today():
@@ -44,4 +43,6 @@ async def handle_webhook():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    loop = asyncio.get_event_loop()
+    loop.create_task(app.run(port=5000, debug=True))
+    loop.run_forever()
