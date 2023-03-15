@@ -3,6 +3,7 @@ from flask import Flask, request
 import json
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 import datetime
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -64,11 +65,12 @@ def check_json_data():
 scheduler = BackgroundScheduler(timezone='America/Santiago')
 
 # Schedule the check_json_data function to run every day at 10 AM
-scheduler.add_job(check_json_data, 'cron', hour=18, minute=26, timezone='America/Santiago')
+trigger = CronTrigger(hour=18, minute=38, timezone='America/Santiago')
+scheduler.add_job(check_json_data, trigger = trigger)
+
+# Start the scheduler
+scheduler.start()
 
 if __name__ == '__main__':
-    # Start the scheduler
-    scheduler.start()
-
     # Run the Flask app
     app.run(use_reloader = False)
