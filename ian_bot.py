@@ -7,6 +7,7 @@ import hashlib
 import telegram
 from aiohttp import web
 
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(dir_path, 'config.json')
 
@@ -16,6 +17,8 @@ with open(config_path, 'r') as f:
 TELEGRAM_TOKEN = config["TELEGRAM_BOT_TOKEN"]
 TELEGRAM_CHAT_ID = config["CHAT_ID"]
 GITHUB_SECRET = config["GITHUB_SECRET"]
+
+app = web.Application()
 
 async def handle_webhook(request):
     body = await request.json()
@@ -36,7 +39,7 @@ def verify_signature(signature, body):
 
 async def send_telegram_notification(message):
     bot = telegram.Bot(token = TELEGRAM_TOKEN)
-    bot.send_message(chat_id = TELEGRAM_CHAT_ID, text=message)
+    bot.send_message(chat_id = TELEGRAM_CHAT_ID, text = message)
 
 if __name__ == '__main__':
     app = web.Application()
