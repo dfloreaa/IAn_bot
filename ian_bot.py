@@ -14,7 +14,7 @@ with open(config_path, 'r') as f:
     config = json.load(f)
 
 app = Flask(__name__)
-telegram_bot = telegram.Bot(token=config['TELEGRAM_BOT_TOKEN'])
+telegram_bot = telegram.Bot(token=config['TELEGRAM_BOT_TOKEN'], max_connections = 10 , read_timeout = 15)
 github = Github(config['GITHUB_TOKEN'])
 repo = github.get_repo(config['GITHUB_REPO'])
 
