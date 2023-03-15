@@ -1,11 +1,11 @@
+import aiohttp
 import asyncio
 import json
 import os
-
-from aiohttp import ClientSession
-from flask import Flask, request
-from github import Github
+import hmac
+import hashlib
 import telegram
+from aiohttp import web
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(dir_path, 'config.json')
@@ -13,34 +13,32 @@ config_path = os.path.join(dir_path, 'config.json')
 with open(config_path, 'r') as f:
     config = json.load(f)
 
-app = Flask(__name__)
-telegram_bot = telegram.Bot(token=config['TELEGRAM_BOT_TOKEN'])
-github = Github(config['GITHUB_TOKEN'])
-repo = github.get_repo(config['GITHUB_REPO'])
+TELEGRAM_TOKEN = config["TELEGRAM_BOT_TOKEN"]
+TELEGRAM_CHAT_ID = config["CHAT_ID"]
+GITHUB_SECRET = config["GITHUB_SECRET"]
 
-async def handle_issue_event(event_data):
-    issue = repo.get_issue(event_data['issue']['number'])
-    group_id = get_group_for_today()
+async def handle_webhook(request):
+    body = await request.json()
+    signature = request.headers.get('X-Hub-Signature')
+    if not verify_signature(signature, body):
+        return web.Response(status=401)
 
-    issue_repo = ''.join(issue.url.split("https://api.github.com/repos")[1:])
-    issue_url = "https://github.com/" + issue_repo
-
-    message = f"<a href={issue_url}> <b>Issue #{issue.number} - {issue.title}</b></a> \n\n<b>Descripción:</b>\n{issue.body}\n\n<b>Link:</b>"
-    
-    await telegram_bot.send_message(chat_id=group_id, text=message, parse_mode='HTML', pool_timeout = 15)
-
-
-def get_group_for_today():
-    return config['CHAT_ID']
-
-
-@app.route('/', methods=['POST'])
-async def handle_webhook():
     event_type = request.headers.get('X-GitHub-Event')
     if event_type == 'issues':
-        await handle_issue_event(request.json)
-    return '', 204
+        issue = body['issue']
+        message = f'New issue posted on {issue["repository"]["name"]}: {issue["title"]} ({issue["html_url"]})'
+        await send_telegram_notification(message)
+    return web.Response(status=200)
 
+def verify_signature(signature, body):
+    digest = hmac.new(GITHUB_SECRET.encode(), body, hashlib.sha1).hexdigest()
+    return hmac.compare_digest(f'sha1={digest}', signature)
+
+async def send_telegram_notification(message):
+    bot = telegram.Bot(token = TELEGRAM_TOKEN)
+    bot.send_message(chat_id = TELEGRAM_CHAT_ID, text=message)
 
 if __name__ == '__main__':
-    asyncio.run(app.run(port=5000, debug=True))
+    app = web.Application()
+    app.router.add_post('/webhook', handle_webhook)
+    web.run_app(app)
