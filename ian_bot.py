@@ -29,7 +29,7 @@ def send_issue_to_telegram(issue):
     chat_id = config["CHAT_ID"]
 
     # Construct the message to send to the Telegram group
-    message = f"<a href={issue['html_url']}> <b>Issue #{issue['id']} - {issue['title']}</b></a> \n\n<b>Descripción:</b>\n{issue['body']}"
+    message = f"[**Issue #{issue['id']} - {issue['title']}**]({issue['html_url']}) \n\n**Descripción:**\n{issue['body']}"
 
     # Use the bot to send the message to the Telegram group
     bot.bot.send_message(chat_id=chat_id, text=message, parse_mode='Markdown')
