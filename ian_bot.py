@@ -68,10 +68,10 @@ def send_message(chat_id, message):
     bot.bot.send_message(chat_id = chat_id, text = message, parse_mode='Markdown')
 
 # Create a BackgroundScheduler instance
-scheduler = BackgroundScheduler({'apscheduler.timezone': 'Chile/Continental'})
+scheduler = BackgroundScheduler()
 
 # Schedule the check_json_data function to run every day at 10 AM
-scheduler.add_job(check_json_data, 'interval', days = 1, start_date='2023-03-15 17:23:00')
+scheduler.add_job(check_json_data, 'interval', days = 1, start_date='2023-03-15 20:32:00')
 
 if __name__ == '__main__':
     # Start the scheduler
