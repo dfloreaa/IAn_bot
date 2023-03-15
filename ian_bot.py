@@ -4,10 +4,13 @@ import json
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
 import datetime
+from pytz import timezone
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 config_path = os.path.join(dir_path, 'config.json')
 reminder_path = os.path.join(dir_path, 'reminders.json')
+
+CL_tz = timezone("America/Santiago")
 
 with open(config_path, 'r') as f:
     config = json.load(f)
@@ -37,17 +40,11 @@ def send_issue_to_telegram(issue):
     # Use the bot to send the message to the Telegram group
     bot.bot.send_message(chat_id=chat_id, text=message, parse_mode='Markdown')
 
-print(datetime.date.today())
-print(datetime.datetime.now())
-
 def check_json_data():
     with open(reminder_path, 'r') as f:
         data = json.load(f)
 
     # Get the current date
-    print("RUNNING")
-    print(datetime.date.today())
-    print(datetime.datetime.now())
     today = datetime.date.today()
 
     # Check if today is featured in the JSON file
@@ -71,7 +68,7 @@ def send_message(chat_id, message):
 scheduler = BackgroundScheduler()
 
 # Schedule the check_json_data function to run every day at 10 AM
-scheduler.add_job(check_json_data, 'interval', days = 1, start_date='2023-03-15 20:32:00')
+scheduler.add_job(check_json_data, 'cron', hour=18, minute=0, timezone='America/Santiago')
 
 if __name__ == '__main__':
     # Start the scheduler
