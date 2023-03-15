@@ -19,6 +19,9 @@ github = Github(config['GITHUB_TOKEN'])
 repo = github.get_repo(config['GITHUB_REPO'])
 
 async def handle_issue_event(event_data):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
     issue = repo.get_issue(event_data['issue']['number'])
     group_id = get_group_for_today()
 
@@ -29,6 +32,7 @@ async def handle_issue_event(event_data):
     
     await telegram_bot.send_message(chat_id=group_id, text=message, parse_mode='HTML')
 
+    loop.close()
 
 def get_group_for_today():
     return config['CHAT_ID']
