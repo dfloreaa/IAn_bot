@@ -2,6 +2,7 @@ from telegram.ext import Updater, CommandHandler
 from flask import Flask, request
 import json
 import os
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import datetime
@@ -65,7 +66,7 @@ def check_json_data():
 scheduler = BackgroundScheduler(timezone='America/Santiago')
 
 # Schedule the check_json_data function to run every day at 10 AM
-trigger = CronTrigger(hour=18, minute=38, timezone='America/Santiago')
+trigger = CronTrigger(hour=10, minute=0, timezone='America/Santiago')
 scheduler.add_job(check_json_data, trigger = trigger)
 
 # Start the scheduler
