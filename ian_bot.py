@@ -41,6 +41,10 @@ async def send_telegram_notification(message):
     bot = telegram.Bot(token = TELEGRAM_TOKEN)
     bot.send_message(chat_id = TELEGRAM_CHAT_ID, text = message)
 
+
+def wsgi_app(environ, start_response):
+    return app._app(environ, start_response)
+
 if __name__ == '__main__':
     app.router.add_post('/webhook', handle_webhook)
     web.run_app(app)
