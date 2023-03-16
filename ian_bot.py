@@ -71,8 +71,8 @@ scheduler = BackgroundScheduler(timezone='America/Santiago', jobstores = {'defau
 # Start the scheduler
 scheduler.start()
 
-# Schedule the check_json_data function to run every day at 9 AM
-trigger = CronTrigger(hour=9, minute=0, timezone='America/Santiago')
+# Schedule the check_json_data function to run every day at 9:30 AM
+trigger = CronTrigger(hour=9, minute=30, timezone='America/Santiago')
 scheduler.add_job(check_json_data, trigger = trigger)
 
 if __name__ == '__main__':
