@@ -66,7 +66,7 @@ def check_json_data():
 scheduler = BackgroundScheduler(timezone='America/Santiago')
 
 # Schedule the check_json_data function to run every day at 10 AM
-trigger = CronTrigger(hour=10, minute=0, timezone='America/Santiago')
+trigger = CronTrigger(hour=23, minute=56, timezone='America/Santiago')
 scheduler.add_job(check_json_data, trigger = trigger)
 
 # Start the scheduler
