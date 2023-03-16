@@ -74,4 +74,5 @@ scheduler.start()
 
 if __name__ == '__main__':
     # Run the Flask app
-    app.run(debug = False, use_reloader = False)
+    # app.run(debug = False, use_reloader = False)
+    pass
