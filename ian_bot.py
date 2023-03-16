@@ -66,7 +66,7 @@ def check_json_data():
 scheduler = BackgroundScheduler(timezone='America/Santiago')
 
 # Schedule the check_json_data function to run every day at 10 AM
-trigger = CronTrigger(hour=0, minute=37, timezone='America/Santiago')
+trigger = CronTrigger(hour=0, minute=45, timezone='America/Santiago')
 scheduler.add_job(check_json_data, trigger = trigger)
 
 # Start the scheduler
@@ -74,5 +74,4 @@ scheduler.start()
 
 if __name__ == '__main__':
     # Run the Flask app
-    # app.run(debug = False, use_reloader = False)
-    pass
+    app.run(debug = False, use_reloader = False)
