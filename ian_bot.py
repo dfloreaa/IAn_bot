@@ -5,6 +5,7 @@ import os
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 import datetime
 
 import sys, socket
@@ -61,23 +62,18 @@ def check_json_data():
             # Use the bot to send the message to the Telegram group
             bot.bot.send_message(chat_id = chat_id, text = message, parse_mode = 'Markdown')
 
-try:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(("127.0.0.1", 47200))
+# Solution to multiple schedulers from
+# https://stackoverflow.com/questions/16053364/make-sure-only-one-worker-launches-the-apscheduler-event-in-a-pyramid-web-app-ru
 
-except socket.error:
-    pass
+# Create a BackgroundScheduler instance
+scheduler = BackgroundScheduler(timezone='America/Santiago', jobstores={'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')})
 
-else:
-    # Create a BackgroundScheduler instance
-    scheduler = BackgroundScheduler(timezone='America/Santiago')
+# Start the scheduler
+scheduler.start()
 
-    # Schedule the check_json_data function to run every day at 10 AM
-    trigger = CronTrigger(hour=2, minute=0, timezone='America/Santiago')
-    scheduler.add_job(check_json_data, trigger = trigger)
-
-    # Start the scheduler
-    scheduler.start()
+# Schedule the check_json_data function to run every day at 9 AM
+trigger = CronTrigger(hour=2, minute=12, timezone='America/Santiago')
+scheduler.add_job(check_json_data, trigger = trigger)
 
 if __name__ == '__main__':
     # Run the Flask app
