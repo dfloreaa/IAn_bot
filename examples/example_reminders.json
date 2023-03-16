@@ -1,5 +1,22 @@
 {
-    "2023-03-15": "Take out the trash",
-    "2023-03-16": "Buy groceries",
-    "2023-03-17": "Call mom"
+    "2023-03-01": [
+        {
+            "message": "@User1, @User2\n\nDesde hoy comienza el desarrollo de la Tarea [NUMERO] con publicacion el dia 29-03-2023",
+            "chat_id": "0000000000"
+        },
+        {
+            "message": "[AYUDANTE JEFE]: Recuerda crear el grupo de telegram para la Tarea [NUMERO] con los siguientes ayudantes:\n\n@User1, @User2",
+            "chat_id": "0000000000"
+        }
+    ],
+    "2023-06-19": [
+        {
+            "message": "@User1, @User2\n\nRecuerden que hoy deben hacer la ayudantia sobre [TEMA] y tener el control respectivo listo.",
+            "chat_id": "0000000000"
+        },
+        {
+            "message": "[AYUDANTE JEFE]: Recuerda subir el control sobre [TEMA] a Canvas.",
+            "chat_id": "0000000000"
+        }
+    ]
 }
