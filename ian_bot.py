@@ -66,13 +66,13 @@ def check_json_data():
 # https://stackoverflow.com/questions/16053364/make-sure-only-one-worker-launches-the-apscheduler-event-in-a-pyramid-web-app-ru
 
 # Create a BackgroundScheduler instance
-scheduler = BackgroundScheduler(timezone='America/Santiago', jobstores={'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')})
+scheduler = BackgroundScheduler(timezone='America/Santiago', jobstores = {'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')})
 
 # Start the scheduler
 scheduler.start()
 
 # Schedule the check_json_data function to run every day at 9 AM
-trigger = CronTrigger(hour=2, minute=12, timezone='America/Santiago')
+trigger = CronTrigger(hour=2, minute=25, timezone='America/Santiago')
 scheduler.add_job(check_json_data, trigger = trigger)
 
 if __name__ == '__main__':
